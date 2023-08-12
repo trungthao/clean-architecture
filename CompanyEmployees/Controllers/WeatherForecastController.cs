@@ -1,4 +1,4 @@
-using Contracts;
+using Domain.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CompanyEmployees.Controllers;

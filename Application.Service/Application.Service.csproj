@@ -7,9 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Repositories\" />
+    <ProjectReference Include="..\Contracts\Domain.Contracts.csproj" />
+    <ProjectReference Include="..\Service.Contracts\Application.Service.Contracts.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Repositories\" />
-  </ItemGroup>
+
 </Project>
