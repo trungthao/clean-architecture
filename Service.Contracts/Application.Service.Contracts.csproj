@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Application.Service\CompanyService.cs" />
+    <Compile Remove="Application.Service\EmployeeManager.cs" />
+    <Compile Remove="Application.Service\obj\Debug\net7.0\.NETCoreApp,Version=v7.0.AssemblyAttributes.cs" />
+    <Compile Remove="Application.Service\obj\Debug\net7.0\Application.Service.GlobalUsings.g.cs" />
+    <Compile Remove="Application.Service\obj\Debug\net7.0\Application.Service.AssemblyInfo.cs" />
+    <Compile Remove="Application.Service\ServiceManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Application.Service\obj\Application.Service.csproj.nuget.g.props" />
+    <None Remove="Application.Service\obj\Application.Service.csproj.nuget.g.targets" />
+    <None Remove="Application.Service\obj\Application.Service.csproj.nuget.dgspec.json" />
+    <None Remove="Application.Service\obj\project.nuget.cache" />
+    <None Remove="Application.Service\obj\project.assets.json" />
+    <None Remove="Application.Service\obj\Debug\net7.0\Application.Service.AssemblyInfoInputs.cache" />
+    <None Remove="Application.Service\obj\Debug\net7.0\Application.Service.GeneratedMSBuildEditorConfig.editorconfig" />
+    <None Remove="Application.Service\obj\Debug\net7.0\Application.Service.csproj.AssemblyReference.cache" />
+    <None Remove="Application.Service\obj\Debug\net7.0\Application.Service.assets.cache" />
+  </ItemGroup>
+</Project>
