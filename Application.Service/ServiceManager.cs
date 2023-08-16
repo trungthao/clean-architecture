@@ -1,10 +1,7 @@
 ﻿using Application.Service.Contracts;
+using AutoMapper;
+using Domain.Contracts;
 using Domain.Contracts.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Service
 {
@@ -13,10 +10,10 @@ namespace Application.Service
         private readonly Lazy<ICompanyService> _companyService;
         private readonly Lazy<IEmployeeService> _employeeService;
 
-        public ServiceManager(IRepositoryManager repositoryManager)
+        public ServiceManager(IRepositoryManager repositoryManager, ILoggerManager logger, IMapper mapper)
         {
-            _companyService = new Lazy<ICompanyService>(() => new CompanyService(repositoryManager));
-            _employeeService = new Lazy<IEmployeeService>(() => new EmployeeService(repositoryManager));
+            _companyService = new Lazy<ICompanyService>(() => new CompanyService(repositoryManager, logger, mapper));
+            _employeeService = new Lazy<IEmployeeService>(() => new EmployeeService(repositoryManager, logger, mapper));
         }
 
         public ICompanyService Company => _companyService.Value;
