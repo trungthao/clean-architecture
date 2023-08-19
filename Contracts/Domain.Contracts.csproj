@@ -14,5 +14,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Entities\Domain.Entities.csproj" />
+    <ProjectReference Include="..\Common.Shared\Common.Shared.csproj" />
   </ItemGroup>
 </Project>

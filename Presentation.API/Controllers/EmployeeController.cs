@@ -1,5 +1,6 @@
 ﻿using Application.Service.Contracts;
 using Common.Shared.DataTransferObjects;
+using Common.Shared.RequestFeatures;
 using Domain.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.API.ActionFilters;
@@ -29,6 +30,13 @@ namespace Presentation.API.Controllers
         {
             var employee = await _service.Employee.GetEmployeeAsync(companyId, employeeId);
             return Ok(employee);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetEmployeesForCompany(Guid companyId, [FromQuery] EmployeeParameters employeeParamerers)
+        {
+            var employees = await _service.Employee.GetEmployeesAsync(companyId, employeeParamerers);
+            return Ok(employees);
         }
 
         [HttpPost]

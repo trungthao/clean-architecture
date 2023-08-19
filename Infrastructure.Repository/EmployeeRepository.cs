@@ -1,4 +1,5 @@
-﻿using Domain.Contracts.Repositories;
+﻿using Common.Shared.RequestFeatures;
+using Domain.Contracts.Repositories;
 using Domain.Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,5 +21,14 @@ public class EmployeeRepository : RepositoryBase<Employee>, IEmployeeRepository
     {
         return await FindByCondition(e => e.CompanyId.Equals(companyId) && e.Id.Equals(employeeId))
             .FirstOrDefaultAsync();
+    }
+
+    public async Task<IEnumerable<Employee>> GetEmployeesAsync(Guid companyId, EmployeeParameters employeeParameters)
+    {
+        return await FindByCondition(e => e.CompanyId.Equals(companyId))
+            .OrderBy(e => e.Name)
+            .Skip((employeeParameters.PageNumber - 1) * employeeParameters.PageSize)
+            .Take(employeeParameters.PageSize)
+            .ToListAsync();
     }
 }

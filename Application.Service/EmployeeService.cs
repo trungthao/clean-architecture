@@ -1,6 +1,7 @@
 ﻿using Application.Service.Contracts;
 using AutoMapper;
 using Common.Shared.DataTransferObjects;
+using Common.Shared.RequestFeatures;
 using Domain.Contracts;
 using Domain.Contracts.Repositories;
 using Domain.Entities.Exceptions;
@@ -42,6 +43,16 @@ namespace Application.Service
             var employeeToReturn = _mapper.Map<EmployeeDto>(employeeEntity);
 
             return employeeToReturn;
+        }
+
+        public async Task<IEnumerable<EmployeeDto>> GetEmployeesAsync(Guid companyId, EmployeeParameters employeeParameters)
+        {
+            await CheckIfCompanyExists(companyId);
+
+            var employeesFromDb = await _repositoryManager.Employee.GetEmployeesAsync(companyId, employeeParameters);
+            var employeesDto = _mapper.Map<IEnumerable<EmployeeDto>>(employeesFromDb);
+
+            return employeesDto;
         }
 
         public async Task UpdateEmployeeForCompanyAsync(Guid companyId, Guid employeeId, EmployeeForUpdateDto employeeForUpdate)
