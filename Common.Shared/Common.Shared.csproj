@@ -9,7 +9,4 @@
   <ItemGroup>
     <None Remove="RequestFeatures\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="RequestFeatures\" />
-  </ItemGroup>
 </Project>

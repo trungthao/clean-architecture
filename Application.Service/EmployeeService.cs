@@ -45,14 +45,14 @@ namespace Application.Service
             return employeeToReturn;
         }
 
-        public async Task<IEnumerable<EmployeeDto>> GetEmployeesAsync(Guid companyId, EmployeeParameters employeeParameters)
+        public async Task<(IEnumerable<EmployeeDto> employees, MetaData metaData)> GetEmployeesAsync(Guid companyId, EmployeeParameters employeeParameters)
         {
             await CheckIfCompanyExists(companyId);
 
-            var employeesFromDb = await _repositoryManager.Employee.GetEmployeesAsync(companyId, employeeParameters);
-            var employeesDto = _mapper.Map<IEnumerable<EmployeeDto>>(employeesFromDb);
+            var employeesWithMetaData = await _repositoryManager.Employee.GetEmployeesAsync(companyId, employeeParameters);
+            var employeesDto = _mapper.Map<IEnumerable<EmployeeDto>>(employeesWithMetaData);
 
-            return employeesDto;
+            return (employeesDto, employeesWithMetaData.MetaData);
         }
 
         public async Task UpdateEmployeeForCompanyAsync(Guid companyId, Guid employeeId, EmployeeForUpdateDto employeeForUpdate)
