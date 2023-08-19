@@ -25,11 +25,11 @@ namespace Infrastructure.Repository
             return RepositoryContext.Set<T>().AsNoTracking();
         }
 
-        public IEnumerable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChange = false)
+        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChange = false)
         {
-            return trackChange ? 
-                RepositoryContext.Set<T>().Where(expression).ToList() 
-                : RepositoryContext.Set<T>().AsNoTracking().Where(expression).ToList();
+            return trackChange ?
+                RepositoryContext.Set<T>().Where(expression)
+                : RepositoryContext.Set<T>().AsNoTracking().Where(expression);
         }
 
         public void Insert(T entity)

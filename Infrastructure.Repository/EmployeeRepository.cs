@@ -1,5 +1,6 @@
 ﻿using Domain.Contracts.Repositories;
 using Domain.Entities.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repository;
 
@@ -15,9 +16,9 @@ public class EmployeeRepository : RepositoryBase<Employee>, IEmployeeRepository
         Insert(employee);
     }
 
-    public Employee GetEmployee(Guid companyId, Guid employeeId, bool trackChange = false)
+    public async Task<Employee> GetEmployeeAsync(Guid companyId, Guid employeeId, bool trackChange = false)
     {
-        return FindByCondition(e => e.CompanyId.Equals(companyId) && e.Id.Equals(employeeId))
-            .FirstOrDefault();
+        return await FindByCondition(e => e.CompanyId.Equals(companyId) && e.Id.Equals(employeeId))
+            .FirstOrDefaultAsync();
     }
 }

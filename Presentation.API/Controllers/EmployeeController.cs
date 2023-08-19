@@ -2,6 +2,7 @@
 using Common.Shared.DataTransferObjects;
 using Domain.Contracts;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.API.ActionFilters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,39 +25,33 @@ namespace Presentation.API.Controllers
         }
 
         [HttpGet("{employeeId:guid}", Name = "GetEmployeeForCompany")]
-        public IActionResult GetEmployeeForCompany(Guid companyId, Guid employeeId)
+        public async Task<IActionResult> GetEmployeeForCompany(Guid companyId, Guid employeeId)
         {
-            var employee = _service.Employee.GetEmployee(companyId, employeeId);
+            var employee = await _service.Employee.GetEmployeeAsync(companyId, employeeId);
             return Ok(employee);
         }
 
         [HttpPost]
-        public IActionResult CreateEmployeeForCompany(Guid companyId, [FromBody] EmployeeForCreationDto employee)
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        public async Task<IActionResult> CreateEmployeeForCompany(Guid companyId, [FromBody] EmployeeForCreationDto employee)
         {
-            if (employee is null)
-                return BadRequest("EmployeeForCreationDto object is null");
-
-            if (!ModelState.IsValid)
-                return UnprocessableEntity(ModelState);
-
-            var employeeToReturn = _service.Employee.CreateEmployeeForCompany(companyId, employee);
+            var employeeToReturn = await _service.Employee.CreateEmployeeForCompanyAsync(companyId, employee);
             return CreatedAtRoute("GetEmployeeForCompany", new
             {
                 companyId,
                 employeeId = employeeToReturn.Id
             },
             employeeToReturn);
-        }        [HttpPut("{employeeId:guid}")]
-        public IActionResult UpdateEmployeeForCompany(Guid companyId, Guid employeeId, [FromBody] EmployeeForUpdateDto employee)
+        }
+
+        [HttpPut("{employeeId:guid}")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        public async Task<IActionResult> UpdateEmployeeForCompany(Guid companyId, Guid employeeId, [FromBody] EmployeeForUpdateDto employee)
         {
-            if (employee is null)
-                return BadRequest("EmployeeForUpdateDto object is null");
-
-            if (!ModelState.IsValid)
-                return UnprocessableEntity(ModelState);
-
-            _service.Employee.UpdateEmployeeForCompany(companyId, employeeId, employee);
+            await _service.Employee.UpdateEmployeeForCompanyAsync(companyId, employeeId, employee);
             return NoContent();
-        }
+        }
+
+
     }
 }

@@ -4,16 +4,17 @@ namespace Application.Service.Contracts;
 
 public interface ICompanyService
 {
-    IEnumerable<CompanyDto> GetAllCompanies();
+    Task<IEnumerable<CompanyDto>> GetAllCompaniesAsync();
 
-    CompanyDto GetCompany(Guid companyId);
-    CompanyDto CreateCompany(CompanyForCreationDto company);
-    IEnumerable<CompanyDto> GetByIds(string ids);
+    Task<CompanyDto> GetCompanyAsync(Guid companyId);
+    Task<CompanyDto> CreateCompanyAsync(CompanyForCreationDto company);
+    Task<IEnumerable<CompanyDto>> GetByIdsAsync(string ids);
 
-    (IEnumerable<CompanyDto> companies, string ids) CreateCompanyCollection(IEnumerable<CompanyForCreationDto> companyCollection);
+    Task<(IEnumerable<CompanyDto> companies, string ids)> CreateCompanyCollectionAsync(IEnumerable<CompanyForCreationDto> companyCollection);
 
-    void DeleteCompany(Guid companyId);
-    void UpdateCompany(Guid companyId, CompanyForUpdateDto companyForUpdate);
+    Task DeleteCompanyAsync(Guid companyId);
+
+    Task UpdateCompanyAsync(Guid companyId, CompanyForUpdateDto companyForUpdate);
 
 }
 

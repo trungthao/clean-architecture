@@ -4,7 +4,7 @@ namespace Domain.Contracts.Repositories;
 
 public interface IEmployeeRepository
 {
-    Employee GetEmployee(Guid companyId, Guid employeeId, bool trackChange = false);
+    Task<Employee> GetEmployeeAsync(Guid companyId, Guid employeeId, bool trackChange = false);
     void CreateEmployeeForCompany(Guid companyId, Employee employee);
 }
 

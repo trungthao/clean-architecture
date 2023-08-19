@@ -1,6 +1,7 @@
 ﻿using Domain.Contracts.Repositories;
 using Domain.Entities.Exceptions;
 using Domain.Entities.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repository
 {
@@ -20,22 +21,23 @@ namespace Infrastructure.Repository
             Delete(company);
         }
 
-        public IEnumerable<Company> GetAllCompanies()
+        public async Task<IEnumerable<Company>> GetAllCompaniesAsync()
         {
-            return FindAll()
+            return await FindAll()
                 .OrderBy(c => c.Name)
-                .ToList();
+                .ToListAsync();
         }
 
-        public IEnumerable<Company> GetByIds(IEnumerable<Guid> ids)
+        public async Task<IEnumerable<Company>> GetByIdsAsync(IEnumerable<Guid> ids)
         {
-            return FindByCondition(x => ids.Contains(x.Id))
-                .ToList();
+            return await FindByCondition(x => ids.Contains(x.Id))
+                .ToListAsync();
         }
 
-        public Company GetCompany(Guid companyId, bool isTrackChange)
+        public async Task<Company> GetCompanyAsync(Guid companyId, bool isTrackChange)
         {
-            return FindByCondition(c => c.Id.Equals(companyId), isTrackChange).SingleOrDefault();
+            return await FindByCondition(c => c.Id.Equals(companyId), isTrackChange)
+                .SingleOrDefaultAsync();
         }
 
         public void UpdateCompany(Company company)

@@ -4,10 +4,10 @@ namespace Application.Service.Contracts;
 
 public interface IEmployeeService
 {
-    EmployeeDto GetEmployee(Guid companyId, Guid employeeId);
+    Task<EmployeeDto> GetEmployeeAsync(Guid companyId, Guid employeeId);
 
-    void UpdateEmployeeForCompany(Guid companyId, Guid id, EmployeeForUpdateDto employeeForUpdate);
+    Task UpdateEmployeeForCompanyAsync(Guid companyId, Guid employeeId, EmployeeForUpdateDto employeeForUpdate);
 
-    EmployeeDto CreateEmployeeForCompany(Guid companyId, EmployeeForCreationDto employee);
+    Task<EmployeeDto> CreateEmployeeForCompanyAsync(Guid companyId, EmployeeForCreationDto employee);
 }
 
