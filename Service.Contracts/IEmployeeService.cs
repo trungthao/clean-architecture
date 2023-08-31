@@ -1,5 +1,6 @@
 ﻿using Common.Shared.DataTransferObjects;
 using Common.Shared.RequestFeatures;
+using System.Dynamic;
 
 namespace Application.Service.Contracts;
 
@@ -11,6 +12,6 @@ public interface IEmployeeService
 
     Task<EmployeeDto> CreateEmployeeForCompanyAsync(Guid companyId, EmployeeForCreationDto employee);
 
-    Task<(IEnumerable<EmployeeDto> employees, MetaData metaData)> GetEmployeesAsync(Guid companyId, EmployeeParameters employeeParameters);
+    Task<(IEnumerable<ExpandoObject> employees, MetaData metaData)> GetEmployeesAsync(Guid companyId, EmployeeParameters employeeParameters);
 }
 

@@ -1,12 +1,16 @@
 ﻿using Application.Service.Contracts;
 using Common.Shared.DataTransferObjects;
+using Marvin.Cache.Headers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.API.ActionFilters;
 
 namespace Presentation.API.Controllers
 {
+    [ApiVersion("1.0", Deprecated = true)]
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CompaniesController : ControllerBase
     {
         private readonly IServiceManager _service;
@@ -14,6 +18,7 @@ namespace Presentation.API.Controllers
         public CompaniesController(IServiceManager service) => _service = service;
 
         [HttpGet]
+        [ResponseCache(Duration = 60)]
         public async Task<IActionResult> GetCompanies()
         {
             var companies = await _service.Company.GetAllCompaniesAsync();
@@ -21,6 +26,8 @@ namespace Presentation.API.Controllers
         }
 
         [HttpGet("{companyId:guid}", Name = "CompanyById")]
+        [HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 60)]
+        [HttpCacheValidation(MustRevalidate = false)]
         public async Task<IActionResult> GetCompany(Guid companyId)
         {
             var company = await _service.Company.GetCompanyAsync(companyId);

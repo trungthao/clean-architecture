@@ -1,3 +1,5 @@
+using Application.Service;
+using Common.Shared.DataTransferObjects;
 using CompanyEmployees.Extensions;
 using Domain.Contracts;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -15,7 +17,13 @@ builder.Services.ConfigureLoggerService();
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureSqlContext(builder.Configuration);
+builder.Services.ConfigureVersioning();
+builder.Services.ConfigureResponseCaching();
+builder.Services.ConfigureHttpCacheHeaders();
 builder.Services.AddScoped<ValidationFilterAttribute>();
+builder.Services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
+builder.Services.ConfigureIdentity();
+builder.Services.ConfigureJWT(builder.Configuration);
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
@@ -42,7 +50,10 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 });
 
 app.UseCors("CorsPolicy");
+app.UseResponseCaching();
+app.UseHttpCacheHeaders();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -1,6 +1,7 @@
 ﻿using Common.Shared.RequestFeatures;
 using Domain.Contracts.Repositories;
 using Domain.Entities.Models;
+using Infrastructure.Repository.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repository;
@@ -26,7 +27,9 @@ public class EmployeeRepository : RepositoryBase<Employee>, IEmployeeRepository
     public async Task<PagedList<Employee>> GetEmployeesAsync(Guid companyId, EmployeeParameters employeeParameters)
     {
         var employees = await FindByCondition(e => e.CompanyId.Equals(companyId))
-            .OrderBy(e => e.Name)
+            .FilterEmployees(employeeParameters.MinAge, employeeParameters.MaxAge)
+            .Search(employeeParameters.SearchTerm)
+            .Sort(employeeParameters.OrderBy)
             .Skip((employeeParameters.PageNumber - 1) * employeeParameters.PageSize)
             .Take(employeeParameters.PageSize)
             .ToListAsync();

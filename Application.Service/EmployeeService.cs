@@ -8,6 +8,7 @@ using Domain.Entities.Exceptions;
 using Domain.Entities.Models;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,11 +19,13 @@ namespace Application.Service
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
+        private readonly IDataShaper<EmployeeDto> _dataShaper;
 
-        public EmployeeService(IRepositoryManager repositoryManager, IMapper mapper)
+        public EmployeeService(IRepositoryManager repositoryManager, IMapper mapper, IDataShaper<EmployeeDto> dataShaper)
         {
             _repositoryManager = repositoryManager;
             _mapper = mapper;
+            _dataShaper = dataShaper;
         }
 
         public async Task<EmployeeDto> CreateEmployeeForCompanyAsync(Guid companyId, EmployeeForCreationDto employee)
@@ -45,14 +48,18 @@ namespace Application.Service
             return employeeToReturn;
         }
 
-        public async Task<(IEnumerable<EmployeeDto> employees, MetaData metaData)> GetEmployeesAsync(Guid companyId, EmployeeParameters employeeParameters)
+        public async Task<(IEnumerable<ExpandoObject> employees, MetaData metaData)> GetEmployeesAsync(Guid companyId, EmployeeParameters employeeParameters)
         {
+            if (!employeeParameters.ValidAgeRange)
+                throw new MaxAgeRangeBadRequestException();
+
             await CheckIfCompanyExists(companyId);
 
             var employeesWithMetaData = await _repositoryManager.Employee.GetEmployeesAsync(companyId, employeeParameters);
             var employeesDto = _mapper.Map<IEnumerable<EmployeeDto>>(employeesWithMetaData);
+            var shapedData = _dataShaper.ShapeData(employeesDto, employeeParameters.Fields);
 
-            return (employeesDto, employeesWithMetaData.MetaData);
+            return (employees: shapedData, metaData: employeesWithMetaData.MetaData);
         }
 
         public async Task UpdateEmployeeForCompanyAsync(Guid companyId, Guid employeeId, EmployeeForUpdateDto employeeForUpdate)
